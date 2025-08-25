@@ -32,52 +32,39 @@ form:
       validate:
         type: bool
 
-      form:
-        validation: strict
-        fields:
-          enabled:
-            type: toggle
-            label: Plugin Status
-            highlight: 1
-            default: 0
-            options:
-              1: Enabled
-              0: Disabled
-            validate:
-              type: bool
 
-          hcaptcha:
-            type: section
-            title: hCaptcha Configuration
-            underline: true
-            fields:
-              hcaptcha.site_key:
-                type: text
-                label: Site Key
-                help: The site key provided by hCaptcha
-                placeholder: Enter your hCaptcha site key
+    hcaptcha:
+      type: section
+      title: hCaptcha Configuration
+      underline: true
+      fields:
+        hcaptcha.site_key:
+          type: text
+          label: Site Key
+          help: The site key provided by hCaptcha
+          placeholder: Enter your hCaptcha site key
 
-              hcaptcha.secret_key:
-                type: text
-                label: Secret Key
-                help: The secret key provided by hCaptcha
-                placeholder: Enter your hCaptcha secret key
+        hcaptcha.secret_key:
+          type: text
+          label: Secret Key
+          help: The secret key provided by hCaptcha
+          placeholder: Enter your hCaptcha secret key
 
-              hcaptcha.theme:
-                type: select
-                label: Theme
-                help: Select the theme for the hCaptcha widget
-                default: light
-                options:
-                  light: Light
-                  dark: Dark
+        hcaptcha.theme:
+          type: select
+          label: Theme
+          help: Select the theme for the hCaptcha widget
+          default: light
+          options:
+            light: Light
+            dark: Dark
 
-              hcaptcha.size:
-                type: select
-                label: Size
-                help: Select the size for the hCaptcha widget
-                default: normal
-                options:
-                  normal: Normal
-                  compact: Compact
-                  invisible: Invisible
+        hcaptcha.size:
+          type: select
+          label: Size
+          help: Select the size for the hCaptcha widget
+          default: normal
+          options:
+            normal: Normal
+            compact: Compact
+            invisible: Invisible
