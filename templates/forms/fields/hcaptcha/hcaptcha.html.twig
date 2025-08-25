@@ -1,0 +1,85 @@
+{% extends "forms/field.html.twig" %}
+
+{% block label %}{% endblock %}
+
+{% block input %}
+    {% set config = grav.config.plugins['form-captcha-hcaptcha'].hcaptcha %}
+    {% set formId = form.id ?: form.name %}
+    {% set lang = grav.language.language %}
+
+    {# Get configuration values with fallbacks #}
+    {% set site_key = field.hcaptcha_site_key ?? config.site_key ?? '' %}
+    {% set theme = field.hcaptcha_theme ?? config.theme ?? 'light' %}
+    {% set size = field.hcaptcha_size ?? config.size ?? 'normal' %}
+    {% set container_id = 'h-captcha-' ~ formId %}
+
+    {% if not site_key %}
+        <div class="form-error">hCaptcha site key is not set. Please set it in the form field or plugin configuration.</div>
+    {% else %}
+        <div class="h-captcha-container"
+             data-form-id="{{ formId }}"
+             data-captcha-provider="hcaptcha"
+             data-sitekey="{{ site_key }}"
+             data-theme="{{ theme }}"
+             data-size="{{ size }}">
+
+            {# Standard hCaptcha div which creates the widget #}
+            <div id="{{ container_id }}" class="h-captcha" data-sitekey="{{ site_key }}" data-theme="{{ theme }}" data-size="{{ size }}"></div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Get references to form and container
+                var form = document.getElementById('{{ formId }}');
+                var container = document.getElementById('{{ container_id }}');
+
+                if (!form || !container) return;
+
+                // This function checks for hCaptcha response and copies it to our field
+                function checkForToken() {
+                    // Check for hCaptcha's generated response
+                    var hcaptchaResponse = document.querySelector('textarea[name="h-captcha-response"]');
+
+                    if (hcaptchaResponse && hcaptchaResponse.value) {
+                        // Add a direct field to the form if it doesn't exist
+                        if (!form.querySelector('input[name="h-captcha-response"]')) {
+                            var hiddenInput = document.createElement('input');
+                            hiddenInput.type = 'hidden';
+                            hiddenInput.name = 'h-captcha-response';
+                            hiddenInput.value = hcaptchaResponse.value;
+                            form.appendChild(hiddenInput);
+                        }
+                    }
+                }
+
+                // Check for token every 500ms
+                setInterval(checkForToken, 500);
+
+                // Add submit handler to ensure token is present
+                if (!form.dataset.hcaptchaListenerAttached) {
+                    form.dataset.hcaptchaListenerAttached = 'true';
+
+                    form.addEventListener('submit', function(event) {
+                        checkForToken(); // Check one last time before submission
+
+                        var hcaptchaResponse = document.querySelector('textarea[name="h-captcha-response"]');
+                        var hiddenInput = form.querySelector('input[name="h-captcha-response"]');
+
+                        // Check for the token and prevent submission if missing
+                        var hasToken = (hcaptchaResponse && hcaptchaResponse.value) ||
+                                      (hiddenInput && hiddenInput.value);
+
+                        if (!hasToken) {
+                            event.preventDefault();
+                            alert('Please complete the hCaptcha challenge');
+                            return false;
+                        }
+                    });
+                }
+            });
+        </script>
+
+        {% do assets.addJs('https://js.hcaptcha.com/1/api.js', { 'loading': 'async', 'defer': 'defer' }) %}
+        {% do assets.addJs('plugin://form-captcha-hcaptcha/assets/js/hcaptcha-handler.js') %}
+    {% endif %}
+{% endblock %}

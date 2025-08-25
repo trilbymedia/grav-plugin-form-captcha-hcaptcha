@@ -1,0 +1,9 @@
+en:
+  PLUGIN_FORM_CAPTCHA_HCAPTCHA:
+    THEME: Theme
+    THEME_LIGHT: Light
+    THEME_DARK: Dark
+    SITE_KEY: Site Key
+    SITE_KEY_HELP: 'Get your site key from the hCaptcha dashboard'
+    SECRET_KEY: Secret Key
+    SECRET_KEY_HELP: 'Get your secret key from the hCaptcha dashboard'

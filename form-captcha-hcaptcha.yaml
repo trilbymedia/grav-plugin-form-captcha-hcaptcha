@@ -1,0 +1,6 @@
+enabled: true
+hcaptcha:
+  theme: light            # options: [light | dark]
+  site_key: ''            # Your hCaptcha site key
+  secret_key: ''          # Your hCaptcha secret key
+  size: normal            # options: [normal | compact | invisible]
