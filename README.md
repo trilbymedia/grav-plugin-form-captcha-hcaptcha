@@ -1,8 +1,6 @@
 # Form Captcha hCaptcha Plugin
 
-**This README.md file should be modified to describe the features, installation, configuration, and general usage of the plugin.**
-
-The **Form Captcha hCaptcha** Plugin is an extension for [Grav CMS](https://github.com/getgrav/grav). Provides hCaptcha support for Grav Form plugin
+The **Form Captcha hCaptcha** Plugin is an extension for [Grav CMS](https://github.com/getgrav/grav) that provides [hCaptcha](https://www.hcaptcha.com/) support for the Grav Form plugin v8.0.0+. hCaptcha is a privacy-focused CAPTCHA service that helps protect your forms from spam and abuse while respecting user privacy.
 
 ## Installation
 
@@ -30,27 +28,176 @@ You should now have all the plugin files under
 
 If you use the Admin Plugin, you can install the plugin directly by browsing the `Plugins`-menu and clicking on the `Add` button.
 
+## Requirements
+
+- Grav v1.7.0 or higher
+- Form Plugin v8.0.0 or higher
+
 ## Configuration
 
 Before configuring this plugin, you should copy the `user/plugins/form-captcha-hcaptcha/form-captcha-hcaptcha.yaml` to `user/config/plugins/form-captcha-hcaptcha.yaml` and only edit that copy.
+
+### Getting hCaptcha Keys
+
+1. Sign up for a free account at [hCaptcha.com](https://www.hcaptcha.com/)
+2. Add your site to your hCaptcha dashboard
+3. Copy your **Site Key** and **Secret Key**
+
+### Plugin Configuration
 
 Here is the default configuration and an explanation of available options:
 
 ```yaml
 enabled: true
+hcaptcha:
+  site_key: ''      # Your hCaptcha site key (required)
+  secret_key: ''    # Your hCaptcha secret key (required)
+  theme: light      # Widget theme: light or dark
+  size: normal      # Widget size: normal, compact, or invisible
 ```
+
+#### Configuration Options
+
+- **enabled**: Enable or disable the plugin
+- **site_key**: Your hCaptcha site key obtained from the hCaptcha dashboard
+- **secret_key**: Your hCaptcha secret key for server-side validation
+- **theme**: Visual theme of the widget (`light` or `dark`)
+- **size**: Size of the widget:
+  - `normal`: Standard size widget
+  - `compact`: Smaller widget for space-constrained layouts
+  - `invisible`: Hidden widget that triggers on form submission
 
 Note that if you use the Admin Plugin, a file with your configuration named form-captcha-hcaptcha.yaml will be saved in the `user/config/plugins/`-folder once the configuration is saved in the Admin.
 
 ## Usage
 
-**Describe how to use the plugin.**
+Once the plugin is installed and configured with your hCaptcha keys, you can add hCaptcha to any form by including a captcha field in your form definition.
+
+### Basic Example
+
+Add the following field to your form:
+
+```yaml
+fields:
+    # ... other form fields ...
+    
+    hcaptcha:
+        label: hCaptcha
+        type: captcha
+        provider: hcaptcha
+        captcha_not_validated: 'Captcha not valid!'
+```
+
+And include `captcha: true` in your form's process section:
+
+```yaml
+process:
+    captcha: true
+    # ... other processes ...
+```
+
+### Complete Form Example
+
+Here's a complete example of a contact form with hCaptcha:
+
+```yaml
+---
+title: Contact Form
+forms:
+    contact:
+        fields:
+            name:
+                label: Name
+                type: text
+                validate:
+                    required: true
+            
+            email:
+                label: Email
+                type: email
+                validate:
+                    required: true
+            
+            message:
+                label: Message
+                type: textarea
+                rows: 5
+                validate:
+                    required: true
+            
+            hcaptcha:
+                label: Security Check
+                type: captcha
+                provider: hcaptcha
+                captcha_not_validated: 'Please complete the captcha validation!'
+        
+        buttons:
+            submit:
+                type: submit
+                value: Send Message
+        
+        process:
+            captcha: true
+            email:
+                subject: '[Contact Form] {{ form.value.name|e }}'
+                body: '{% include ''forms/data.html.twig'' %}'
+            message: 'Thank you for your message!'
+            reset: true
+---
+```
+
+### AJAX Form Support
+
+The plugin fully supports AJAX form submissions. Simply add `xhr_submit: true` to your form configuration:
+
+```yaml
+forms:
+    myform:
+        xhr_submit: true
+        fields:
+            # ... your fields ...
+            hcaptcha:
+                type: captcha
+                provider: hcaptcha
+        # ... rest of configuration ...
+```
+
+### Customization Options
+
+You can override the global theme and size settings per form:
+
+```yaml
+hcaptcha:
+    type: captcha
+    provider: hcaptcha
+    theme: dark        # Override global theme
+    size: compact      # Override global size
+```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **"Captcha not valid!" error**
+   - Ensure your site key and secret key are correctly configured
+   - Verify your domain is added to your hCaptcha account
+   - Check that JavaScript is enabled in the browser
+
+2. **Widget not appearing**
+   - Confirm the plugin is enabled
+   - Check browser console for JavaScript errors
+   - Ensure the hCaptcha script is not blocked by ad blockers
+
+3. **AJAX forms not working**
+   - Make sure `xhr_submit: true` is set in your form configuration
+   - Verify that the Form plugin is v8.0.0 or higher
 
 ## Credits
 
-**Did you incorporate third-party code? Want to thank somebody?**
+- [hCaptcha](https://www.hcaptcha.com/) for providing the privacy-focused CAPTCHA service
+- [Grav CMS](https://getgrav.org/) team for the extensible plugin architecture
 
-## To Do
+## License
 
-- [ ] Future plans, if any
+MIT License - See [LICENSE](LICENSE) file for details
 
