@@ -1,7 +1,7 @@
 name: Form Captcha hCaptcha
 slug: form-captcha-hcaptcha
 type: plugin
-version: 1.0.1
+version: 1.0.2
 description: Provides hCaptcha support for Grav Form plugin
 icon: plug
 author:
@@ -13,6 +13,9 @@ keywords: grav, plugin, etc
 bugs: https://github.com/trilbymedia/grav-plugin-form-captcha-hcaptcha/issues
 docs: https://github.com/trilbymedia/grav-plugin-form-captcha-hcaptcha/blob/develop/README.md
 license: MIT
+
+compatibility:
+  grav: ['1.7', '2.0']
 
 dependencies:
   - { name: grav, version: '>=1.7.0' }
