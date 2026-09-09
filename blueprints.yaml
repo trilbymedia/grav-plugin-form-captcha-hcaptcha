@@ -1,14 +1,13 @@
 name: Form Captcha hCaptcha
 slug: form-captcha-hcaptcha
 type: plugin
-version: 1.0.2
+version: 1.0.3
 description: Provides hCaptcha support for Grav Form plugin
 icon: plug
 author:
   name: Trilby Media
   email: hello@trilby.media
 homepage: https://github.com/trilbymedia/grav-plugin-form-captcha-hcaptcha
-demo: http://demo.yoursite.com
 keywords: grav, plugin, etc
 bugs: https://github.com/trilbymedia/grav-plugin-form-captcha-hcaptcha/issues
 docs: https://github.com/trilbymedia/grav-plugin-form-captcha-hcaptcha/blob/develop/README.md
