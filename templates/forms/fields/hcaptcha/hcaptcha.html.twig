@@ -79,7 +79,7 @@
             });
         </script>
 
-        {% do assets.addJs('https://js.hcaptcha.com/1/api.js', { 'loading': 'async', 'defer': 'defer' }) %}
-        {% do assets.addJs('plugin://form-captcha-hcaptcha/assets/js/hcaptcha-handler.js') %}
+        {% do assets.addJs('https://js.hcaptcha.com/1/api.js', { 'group': 'bottom', 'loading': 'async', 'defer': 'defer', 'priority': 110 }) %}
+        {% do assets.addJs('plugin://form-captcha-hcaptcha/assets/js/hcaptcha-handler.js', { 'group': 'bottom', 'priority': 100 }) %}
     {% endif %}
 {% endblock %}
