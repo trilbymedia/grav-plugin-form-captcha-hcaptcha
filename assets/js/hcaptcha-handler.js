@@ -15,6 +15,17 @@
 
             if (!widgetContainer) return;
 
+            // Both registerHCaptchaHandler() and checkAndInitialize() can reach this
+            // point for the same container, and the API script auto-renders the widget
+            // on load as well. hCaptcha refuses a second render into a container it
+            // already owns, so claim it once and leave an auto-rendered widget alone.
+            if (widgetContainer.dataset.hcaptchaInitialized === 'true') return;
+            if (widgetContainer.querySelector('iframe')) {
+                widgetContainer.dataset.hcaptchaInitialized = 'true';
+                return;
+            }
+            widgetContainer.dataset.hcaptchaInitialized = 'true';
+
             const sitekey = container.dataset.sitekey;
             const theme = container.dataset.theme || 'light';
             const size = container.dataset.size || 'normal';
@@ -186,6 +197,7 @@
 
                 // Clear the container to ensure fresh rendering
                 widgetContainer.innerHTML = '';
+                delete widgetContainer.dataset.hcaptchaInitialized;
 
                 // Clear any existing token
                 const hiddenInput = form.querySelector('input[name="h-captcha-response"]');
